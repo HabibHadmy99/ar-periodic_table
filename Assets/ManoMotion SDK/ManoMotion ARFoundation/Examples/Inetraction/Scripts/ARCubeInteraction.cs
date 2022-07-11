@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class ARCubeInteraction : MonoBehaviour
 {
+
+    //declaration of hand gestures
     private ManoGestureContinuous grab;
     private ManoGestureContinuous pinch;
     private ManoGestureTrigger click;
 
     [SerializeField]
     private Material[] arCubeMaterial;
-    [SerializeField]
-    private GameObject smallCube;
 
     private string handTag = "Player";
     private Renderer cubeRenderer;
+
+    public GameObject DetailPanel;
+    public GameObject elementDetails;
+    public GameObject PeriodicTable;
+    public GameObject backButton;
 
     private float skeletonConfidenceThreshold = 0.0001f;
 
@@ -27,75 +32,44 @@ public class ARCubeInteraction : MonoBehaviour
     {
         grab = ManoGestureContinuous.CLOSED_HAND_GESTURE;
         pinch = ManoGestureContinuous.HOLD_GESTURE;
-        click = ManoGestureTrigger.CLICK;
         cubeRenderer = GetComponent<Renderer>();
         cubeRenderer.sharedMaterial = arCubeMaterial[0];
         cubeRenderer.material = arCubeMaterial[0];
     }
-
     private void Update()
     {
         if (ManomotionManager.Instance.Hand_infos[0].hand_info.tracking_info.skeleton.confidence < skeletonConfidenceThreshold)
         {
             cubeRenderer.sharedMaterial = arCubeMaterial[0];
+
+            if (ManomotionManager.Instance.Hand_infos[0].hand_info.gesture_info.mano_gesture_continuous == grab)
+                PeriodicTable.transform.Rotate(Vector3.up * Time.deltaTime * 30, Space.World);
+            else
+                transform.parent = null;
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="other">The collider that stays</param>
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == handTag)
-        {
             cubeRenderer.sharedMaterial = arCubeMaterial[1];
-        }
-
-        //MoveWhenGrab(other);
-        RotateWhenHolding(other);
-        SpawnWhenClicking(other);
+        
+        //GrabRotate(other);
+        PinchDetails(other);
     }
-
-    /// <summary>
-    /// If grab is performed while hand collider is in the cube.
-    /// The cube will follow the hand.
-    /// </summary>
-    private void MoveWhenGrab(Collider other)
+    /*private void GrabRotate(Collider other)
     {
         if (ManomotionManager.Instance.Hand_infos[0].hand_info.gesture_info.mano_gesture_continuous == grab)
-        {
-            transform.parent = other.gameObject.transform;
-        }
-
+            PeriodicTable.transform.Rotate(Vector3.up * Time.deltaTime * 50, Space.World);
         else
-        {
             transform.parent = null;
-        }
-    }
-
-    /// <summary>
-    /// If pinch is performed while hand collider is in the cube.
-    /// The cube will start rotate.
-    /// </summary>
-    private void RotateWhenHolding(Collider other)
+    }*/
+    private void PinchDetails(Collider other)
     {
         if (ManomotionManager.Instance.Hand_infos[0].hand_info.gesture_info.mano_gesture_continuous == pinch)
-        {
-            transform.Rotate(Vector3.up * Time.deltaTime * 50, Space.World);
-        }
-    }
-
-    /// <summary>
-    /// If pick is performed while hand collider is in the cube.
-    /// The cube will follow the hand.
-    /// </summary>
-    private void SpawnWhenClicking(Collider other)
-    {
-        if (ManomotionManager.Instance.Hand_infos[0].hand_info.gesture_info.mano_gesture_trigger == click)
-        {
-            Instantiate(smallCube, new Vector3(transform.position.x, transform.position.y + transform.localScale.y / 1.5f, transform.position.z), Quaternion.identity);
-        }
+            DetailPanel.SetActive(true);
+            elementDetails.SetActive(true);
+            //backButton.SetActive(false);
     }
 
     /// <summary>

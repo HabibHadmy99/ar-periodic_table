@@ -10,7 +10,7 @@ using TMPro;
 public class ScanForSurface : MonoBehaviour
 {
     public GameObject arPlanes;
-    public GameObject arBoxes;
+    public GameObject arPeriodicTable;
     public GameObject[] ManoMotionObjects;
     public ARPlaneManager arPlaneManager;
     public int planeUpdates;
@@ -48,14 +48,15 @@ public class ScanForSurface : MonoBehaviour
         {
             arPlanes.SetActive(false);
 
-            if (arBoxes != null)
+            if (arPeriodicTable != null)
             {
-                arBoxes.SetActive(true);
+                arPeriodicTable.SetActive(true);
             }
 
             foreach (var item in ManoMotionObjects)
             {
                 item.SetActive(true);
+                OnDisable();
             }
 
             this.gameObject.SetActive(false);

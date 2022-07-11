@@ -35,19 +35,17 @@ public class ButtonChangeScene : MonoBehaviour
         _loaderCanvas.SetActive(true);
 
         do{
-            await Task.Delay(100);
+            await Task.Delay(2000);
             _target = scene.progress;
 
         } while (scene.progress < 0.9f);
-
-        await Task.Delay(7000);
 
         scene.allowSceneActivation = true;
         _loaderCanvas.SetActive(false);
     }
 
     void Update() {
-        _progressBar.fillAmount = Mathf.MoveTowards(_progressBar.fillAmount,_target, 1 * Time.deltaTime);
+        _progressBar.fillAmount = Mathf.MoveTowards(_progressBar.fillAmount,_target, 10 * Time.deltaTime);
     }
 
     
