@@ -14,4 +14,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AtomSearch.unity
     guid: 22624917b4137b047b350f8942938d89
-  m_configObjects: {}
+  m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: ea1f54a09b6accb48a93652640c43876, type: 2}
